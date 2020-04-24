@@ -9,7 +9,7 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: true
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)
@@ -39,7 +39,7 @@ class User < ApplicationRecord
     BCrypt::Password.new(remember_digest).is_password?(remember_token)
   end
   
-  # ユーザのログイン情報を破棄
+  # ユーザーのログイン情報を破棄
   def forget
     update_attribute(:remember_digest, nil)
   end
