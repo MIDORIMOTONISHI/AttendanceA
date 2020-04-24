@@ -32,8 +32,15 @@ class User < ApplicationRecord
     self.remember_token = User.new_token
     update_attribute(:remember_digest, User.digest(remember_token))
   end
+  
   # トークンがダイジェストと一致すればtrueを返す
   def authenticated?(remember_token)
+    return false if remember_digest.nil? # ダイジェストが存在しない場合はfalseを返す
     BCrypt::Password.new(remember_digest).is_password?(remember_token)
+  end
+  
+  # ユーザのログイン情報を破棄
+  def forget
+    update_attribute(:remember_digest, nil)
   end
 end
