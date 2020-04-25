@@ -15,6 +15,7 @@
         <td><%= link_to user.name, user %></td>
         <td>
           <% if current_user.admin? && !current_user?(user) %>
+            <%= link_to "基本情報編集", edit_basic_info_user_path(user), class: "btn btn-success" %>
             <%= link_to "削除", user, method: :delete,
                 data: { confirm: "削除してよろしいですか？" },
                 class: "btn btn-danger" %>
