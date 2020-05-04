@@ -16,3 +16,13 @@ ja:
           password_confirmation: パスワード再入力
           created_at: 作成日
           updated_at: 更新日
+        attendance:
+          worked_on: 日付
+          started_at: 出社時間
+          finished_at: 退社時間
+          company_time: 在社時間
+          note: 備考
+          scheduled_end_time: 終了予定時間
+          overtime: 時間外時間
+          business_process: 業務処理内容
+          confirmation: 指示者確認印

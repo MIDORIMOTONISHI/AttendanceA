@@ -1,6 +1,8 @@
 .user-table{
-  vertical-align: middle;
-  text-align: center;
+  td{
+    vertical-align: bottom;
+    text-align: center;
+  }
 }
 
 .label-user{
@@ -15,4 +17,24 @@
   td{
     vertical-align: middle;
   }
+}
+
+#table-attendances{
+  th{
+    vertical-align: bottom;
+    text-align: center;
+  }
+  
+  td{
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+
+.sat {
+  color: #0000ff;
+}
+
+.sun {
+  color: #ff0000;
 }

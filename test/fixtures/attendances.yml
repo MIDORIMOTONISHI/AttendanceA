@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  worked_on: 2020-04-25
+  started_at: 2020-04-25 16:10:01
+  finished_at: 2020-04-25 16:10:01
+  company_time: 2020-04-25 16:10:01
+  note: MyString
+  scheduled_end_time: 2020-04-25 16:10:01
+  overtime: 2020-04-25 16:10:01
+  business_process: MyString
+  confirmation: MyString
+  user: one
+
+two:
+  worked_on: 2020-04-25
+  started_at: 2020-04-25 16:10:01
+  finished_at: 2020-04-25 16:10:01
+  company_time: 2020-04-25 16:10:01
+  note: MyString
+  scheduled_end_time: 2020-04-25 16:10:01
+  overtime: 2020-04-25 16:10:01
+  business_process: MyString
+  confirmation: MyString
+  user: two
