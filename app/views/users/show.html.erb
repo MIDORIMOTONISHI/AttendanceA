@@ -28,6 +28,12 @@
 </div>
 
 <div>
+  <%= link_to "勤怠を編集", "#", class: "btn btn-primary btn-show" %>
+  <%= link_to "CSV出力", "#", class: "btn btn-primary btn-show" %><br>
+  <%= link_to "勤怠修正ログ(承認済み)", "#", class: "btn btn-primary btn-show" %>
+</div>
+
+<div>
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     <thead>
       <tr>
@@ -80,8 +86,11 @@
           </td>
           <td><%= day.finished_at.strftime('%H') if day.finished_at.present? %></td>
           <td><%= day.finished_at.floor_to(15.minutes).strftime('%M') if day.finished_at.present? %></td>
-          <td></td>
-          <td></td>
+          <td><% if day.started_at.present? && day.finished_at.present? %>
+                <%= str_times = working_times(day.started_at, day.finished_at) %>
+                <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+              <% end %>
+          </td>
           <td></td>
           <td></td>
           <td></td>
@@ -91,5 +100,22 @@
         </tr>
       <% end %>
     </tbody>
+    
+    <tfoot>
+      <tr>
+        <td colspan="5"></td>
+        <td colspan="3">累計在社時間</td>
+        <td><%= format("%.2f", @total_working_times.to_f) %></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="pull-right">
+  <table class="table table-bordered table-condensed">
+    <td>
+      所属長承認　未<br>
+      <%= link_to "申請", "#", class: "btn btn-block btn-primary" %>
+    </td>
   </table>
 </div>
