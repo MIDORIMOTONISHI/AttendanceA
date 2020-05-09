@@ -1,4 +1,8 @@
 class AttendancesController < ApplicationController
+  before_action :set_user, only: [:edit_one_month, :update_one_month]
+  before_action :logged_in_user, only: [:update, :edit_one_month, :update_one_month]
+  before_action :set_one_month, only: [:edit_one_month, :update_one_month]
+  
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
 
   def update
@@ -19,4 +23,26 @@ class AttendancesController < ApplicationController
     end
     redirect_to @user
   end
+  
+  def edit_one_month
+  end
+  
+  def update_one_month
+    ActiveRecord::Base.transaction do
+      attendances_params.each do |id, item|
+        attendances = Attendance.find(id)
+        attendances.update_attributes!(item)
+      end
+    end
+    flash[:success] = "１ヶ月分の勤怠情報を更新しました。"
+    redirect_to user_url(date: params[:date])
+  rescue ActiveRecord::RecordInvalid
+    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+    redirect_to attendances_edit_one_month_user_url(date: params[:date])
+  end
+  
+  private
+    def attendances_params
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :scheduled_end_time, :overtime, :business_process, :confirmation])[:attendances]
+    end
 end

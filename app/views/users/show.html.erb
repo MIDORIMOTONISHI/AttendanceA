@@ -28,7 +28,7 @@
 </div>
 
 <div>
-  <%= link_to "勤怠を編集", "#", class: "btn btn-primary btn-show" %>
+  <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary btn-show" %>
   <%= link_to "CSV出力", "#", class: "btn btn-primary btn-show" %><br>
   <%= link_to "勤怠修正ログ(承認済み)", "#", class: "btn btn-primary btn-show" %>
 </div>
@@ -40,8 +40,8 @@
         <th rowspan="3">残業申請</th>
         <th rowspan="3">日付</th>
         <th rowspan="3">曜日</th>
-        <th colspan="8">【実績】</th>
-        <th colspan="5">所定外勤務</th>
+        <th colspan="7">【実績】</th>
+        <th colspan="6">所定外勤務</th>
       </tr>
       <tr>
         <th colspan="2">出社</th>
@@ -91,7 +91,7 @@
                 <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
               <% end %>
           </td>
-          <td></td>
+          <td><%= day.note %></td>
           <td></td>
           <td></td>
           <td></td>
