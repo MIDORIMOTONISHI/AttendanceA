@@ -1,0 +1,24 @@
+<% provide(:title, "出勤中社員一覧") %>
+<h1>出勤中社員一覧</h1>
+
+<div class="col-md-10 col-md-offset-1">
+  <table class="table table-condensed table-hover" id="table-users">
+    <thead>
+      <tr>
+        <th>社員番号</th>
+        <th><%= User.human_attribute_name :name %></th>
+      </tr>
+    </thead>
+    
+    <% @users.each do |user| %>
+      <% user.attendances.each do |attendance| %>
+        <% if (Date.today == attendance.worked_on) && attendance.started_at.present? && attendance.finished_at.nil? %>
+        <tr>
+          <td><%= sprintf("%04d", user.id) %></td>
+          <td><%= user.name %></td>
+        </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+  </table>
+</div>
