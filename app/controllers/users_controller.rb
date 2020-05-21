@@ -70,7 +70,7 @@ class UsersController < ApplicationController
     @users = User.all.includes(:attendances)
   end
 
-    private
+  private
 
     def user_params
       params.require(:user).permit(:name, :email, :affiliation, :employee_number, :password, :password_confirmation)

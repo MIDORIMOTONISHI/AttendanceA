@@ -1,13 +1,19 @@
 .table-bases{
   td{
     vertical-align: middle;
+    text-align: center;
+  }
+  tr{
+    vertical-align: middle;
+    text-align: center;
   }
 }
 
 .btn-base{
+  vertical-align: middle;
   margin-top: 10px;
 }
 
-.label-user{
+.label-base{
   margin-top: 5px;
 }
