@@ -1,0 +1,32 @@
+<%= form_with(model: user, id: user.id, url: update_basic_info_user_path(user), local: true, method: :patch) do |f| %>
+  <%= render 'shared/error_messages', object: user %>
+
+  <%= f.label :name, class: "label-user" %>
+  <%= f.text_field :name, class: "form-control" %>
+  
+  <%= f.label :email, class: "label-user" %>
+  <%= f.email_field :email, class: "form-control" %>
+    
+  <%= f.label :affiliation, class: "label-user" %>
+  <%= f.text_field :affiliation, class: "form-control" %>
+      
+  <%= f.label :employee_number, class: "label-user" %>
+  <%= f.text_field :employee_number, class: "form-control" %>
+  
+  <%= f.label :uid, class: "label-user" %>
+  <%= f.text_field :uid, class: "form-control" %>
+  
+  <%= f.label :password, class: "label-user" %>
+  <%= f.password_field :password, class: "form-control" %>
+      
+  <%= f.label :basic_work_time, class: "label-user" %>
+  <%= f.time_field :basic_work_time, class: "form-control" %>
+      
+  <%= f.label :designated_work_start_time, class: "label-user" %>
+  <%= f.time_field :designated_work_start_time, class: "form-control" %>
+  
+  <%= f.label :designated_work_end_time, class: "label-user" %>
+  <%= f.time_field :designated_work_end_time, class: "form-control" %>
+      
+  <%= f.submit "編集", class: "btn btn-primary btn-block btn-user" %>
+<% end %>

@@ -1,5 +1,5 @@
 <%= form_with(model: @user, local: true) do |f| %>
-  <%= render 'shared/error_messages' %>
+  <%= render 'shared/error_messages', object: @user %>
 
   <%= f.label :name, class: "label-#{yield(:class_text)}" %>
   <%= f.text_field :name, class: "form-control" %>
@@ -7,11 +7,11 @@
   <%= f.label :email, class: "label-#{yield(:class_text)}" %>
   <%= f.email_field :email, class: "form-control" %>
   
-  <%= f.label :department, class: "label-#{yield(:class_text)}" %>
-  <%= f.text_field :department, class: "form-control" %>
+  <%= f.label :affiliation, class: "label-#{yield(:class_text)}" %>
+  <%= f.text_field :affiliation, class: "form-control" %>
       
-  <%= f.label :code, class: "label-#{yield(:class_text)}" %>
-  <%= f.text_field :code, class: "form-control" %>
+  <%= f.label :employee_number, class: "label-#{yield(:class_text)}" %>
+  <%= f.text_field :employee_number, class: "form-control" %>
       
   <%= f.label :password, class: "label-#{yield(:class_text)}" %>
   <%= f.password_field :password, class: "form-control" %>

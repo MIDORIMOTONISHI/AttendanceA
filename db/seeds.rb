@@ -1,16 +1,16 @@
 # coding: utf-8
 
 User.create!(name: "管理者",
-             email: "admin@email.com",
+             email: "admin_a@email.com",
              password: "password",
              password_confirmation: "password",
              admin: true)
              
 User.create!(name: "上長A",
-             email: "boss-a@email.com",
+             email: "boss_a@email.com",
              password: "password",
              password_confirmation: "password",
-             boss: true)
+             superior: true)
 
 60.times do |n|
   name  = Faker::Name.name

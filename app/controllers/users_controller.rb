@@ -9,6 +9,13 @@ class UsersController < ApplicationController
   def index
     @users = User.paginate(page: params[:page])
   end
+
+  def import
+    # fileはtmpに自動で一時保存される
+    User.import(params[:file])
+    flash[:success] = "ユーザーデータを登録しました。"
+    redirect_to users_url
+  end
   
   def new
     @user = User.new
@@ -66,10 +73,11 @@ class UsersController < ApplicationController
     private
 
     def user_params
-      params.require(:user).permit(:name, :email, :department, :code, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :affiliation, :employee_number, :password, :password_confirmation)
     end
     
     def basic_info_params
-      params.require(:user).permit(:department, :code, :work_time, :work_f_time, :basic_time)
+      params.require(:user).permit(:name, :email, :affiliation, :employee_number, :uid, :password,
+                                   :basic_work_time, :designated_work_start_time, :designated_work_end_time)
     end
 end
