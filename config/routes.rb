@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   root 'static_pages#top'
   get '/signup', to: 'users#new'
+  get '/edit_info', to: 'users#edit_info'
   
   # ログイン機能
   get '/login', to: 'sessions#new'
@@ -17,6 +18,8 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get 'working'
+      get 'edit_overwork_request'
+      patch 'update_overwork_request'
     end
     resources :attendances, only: :update
   end
