@@ -1,4 +1,4 @@
-<%= form_with(model: @attedance, url:update_overwork_request_user_path(@user), local: true, method: :patch) do |f| %>
+<%= form_with(model: @attendance, url:update_overwork_request_user_attendance_path(@user, @attendance), local: true, method: :patch) do |f| %>
   <div class="modal-dialog modal-lg modal-dialog-center">
     <div class="modal-content">
       <div class="modal-header">
@@ -21,13 +21,13 @@
               </thead>
             
               <tbody>
-                    <td><%= l(@day, format: :short) %></td>
-                    <% if @day.wday == 6 %>
-                      <td class="sat"><%= $days_of_the_week[@day.wday] %>
-                    <% elsif @day.wday == 0 %>
-                      <td class="sun"><%= $days_of_the_week[@day.wday] %>
+                    <td><%= l(@attendance.worked_on, format: :short) %></td>
+                    <% if @attendance.worked_on.wday == 6 %>
+                      <td class="sat"><%= $days_of_the_week[@attendance.worked_on.wday] %>
+                    <% elsif @attendance.worked_on.wday == 0 %>
+                      <td class="sun"><%= $days_of_the_week[@attendance.worked_on.wday] %>
                     <% else %>
-                      <td><%= $days_of_the_week[@day.wday] %>
+                      <td><%= $days_of_the_week[@attendance.worked_on.wday] %>
                     <% end %>
                     <td><%= f.time_field :scheduled_end_time, class: "form-control" %></td>
                     <td><%= f.check_box :next_day, id: "next_day" %></td>

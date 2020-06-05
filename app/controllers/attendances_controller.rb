@@ -17,7 +17,7 @@ class AttendancesController < ApplicationController
       end
     elsif @attendance.finished_at.nil?
       if @attendance.update_attributes(finished_at: Time.current.change(sec: 0))
-        flash[:info] = "お疲れ様でした！"
+        flash[:info] = "お疲れさまでした。"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
@@ -31,8 +31,8 @@ class AttendancesController < ApplicationController
   def update_one_month
     ActiveRecord::Base.transaction do
       attendances_params.each do |id, item|
-        attendances = Attendance.find(id)
-        attendances.update_attributes!(item)
+        attendance = Attendance.find(id)
+        attendance.update_attributes!(item)
       end
     end
     flash[:success] = "１ヶ月分の勤怠情報を更新しました。"
@@ -42,9 +42,26 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
+  def edit_overwork_request
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+  end
+  
+  def update_overwork_request
+    @attendance = @user.attendances.find_by(worked_on: day)
+    params[:attendance][:next_day] == '1' ? Time.now.tomorrow : Time.now
+    @user.update_attributes(overwork_params)
+    flash[:success] = "残業を申請しました。"
+    redirect_to @user
+  end
+  
   private
     def attendances_params
       params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :scheduled_end_time, :overtime, :business_process, :confirmation])[:attendances]
+    end
+    
+    def overwork_params
+      params.require(:user).permit(attendances: [:scheduled_end_time, :next_day, :business_process, :confirmation])[:attendances]
     end
     
     def admin_or_correct_user

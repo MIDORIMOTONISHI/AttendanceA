@@ -74,19 +74,6 @@ class UsersController < ApplicationController
   
   def edit_info
   end
-  
-  def edit_overwork_request
-    @day = Date.parse(params[:day])
-    @attendance = @user.attendances.find_by(worked_on: @day)
-  end
-  
-  def update_overwork_request
-    @attendance = @user.attendances.find_by(worked_on: @day)
-    params[:attendance][:next_day] == '1' ? Time.now.tomorrow : Time.now
-    @user.update_attributes(overwork_params)
-    flash[:success] = "残業を申請しました。"
-    redirect_to @user
-  end
 
   private
 
@@ -97,9 +84,5 @@ class UsersController < ApplicationController
     def basic_info_params
       params.require(:user).permit(:name, :email, :affiliation, :employee_number, :uid, :password,
                                    :basic_work_time, :designated_work_start_time, :designated_work_end_time)
-    end
-    
-    def overwork_params
-      params.require(:user).permit(attendances: [:scheduled_end_time, :next_day, :business_process, :confirmation])[:attendances]
     end
 end
