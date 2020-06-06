@@ -28,6 +28,16 @@
 </div>
 
 <div>
+  <% if current_user.superior? %>
+    <p>
+      <li><%= link_to "【 所属長承認申請のお知らせ 】", "#" %></li>
+      <li><%= link_to "【 勤怠変更申請のお知らせ 】", "#" %></li>
+      <li><%= link_to "【 残業申請のお知らせ 】", "#" %></li>
+    </p>
+  <% end %>
+</div>
+
+<div>
   <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary btn-show" %>
   <%= link_to "CSV出力", "#", class: "btn btn-primary btn-show" %><br>
   <%= link_to "勤怠修正ログ(承認済み)", "#", class: "btn btn-primary btn-show" %>
