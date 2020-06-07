@@ -30,9 +30,17 @@
 <div>
   <% if current_user.superior? %>
     <p>
-      <li><%= link_to "【 所属長承認申請のお知らせ 】", "#" %></li>
-      <li><%= link_to "【 勤怠変更申請のお知らせ 】", "#" %></li>
-      <li><%= link_to "【 残業申請のお知らせ 】", "#" %></li>
+      <li>【 所属長承認申請のお知らせ 】</li>
+      
+      <li>【 勤怠変更申請のお知らせ 】</li>
+      
+      <li>
+        <% if @overtime != 0 %>
+          <%= link_to "【 残業申請のお知らせ 】", "#", class: "status" %><p class="notice"><%= @overtime %>件の通知があります</p>
+        <% else %>
+          【 残業申請のお知らせ 】
+        <% end %>
+      </li>
     </p>
   <% end %>
 </div>
@@ -102,10 +110,12 @@
               <% end %>
           </td>
           <td><%= day.note %></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><%= day.scheduled_end_time.strftime('%H') if day.scheduled_end_time.present? %></td>
+          <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%M') if day.scheduled_end_time.present? %></td>
+          <td><% if day.scheduled_end_time.present? %>
+                <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time) %></td>
+              <% end %>
+          <td><%= day.business_process %></td>
           <td></td>
         </tr>
       <% end %>

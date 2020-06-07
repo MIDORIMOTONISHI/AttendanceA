@@ -30,9 +30,9 @@
                       <td><%= $days_of_the_week[@attendance.worked_on.wday] %>
                     <% end %>
                     <td><%= f.time_field :scheduled_end_time, class: "form-control" %></td>
-                    <td><%= f.check_box :next_day, id: "next_day" %></td>
+                    <td><%= f.check_box :tomorrow, id: "tomorrow" %></td>
                     <td><%= f.text_field :business_process, class: "form-control" %></td>
-                    <td><%= f.select :confirmation, [["なし", "なし"], ["申請中", "申請中"], ["承認", "承認"], ["否認", "否認"]], class: "form-control" %></td>
+                    <td><%= f.select :confirmation, [["上長A", "上長A"], ["上長B", "上長B"]], class: "form-control" %></td>
               </tbody>
             </table>
             
