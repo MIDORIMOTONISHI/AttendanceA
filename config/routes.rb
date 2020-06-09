@@ -18,6 +18,10 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get 'working'
+      get 'edit_overwork_consent'
+      patch 'update_overwork_consent'
+      get 'attendances/edit_overwork_consent'
+      patch 'attendances/update_overwork_consent'
     end
     resources :attendances, only: :update do
       member do

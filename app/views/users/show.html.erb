@@ -36,7 +36,8 @@
       
       <li>
         <% if @overtime != 0 %>
-          <%= link_to "【 残業申請のお知らせ 】", "#", class: "status" %><p class="notice"><%= @overtime %>件の通知があります</p>
+          <%= link_to "【 残業申請のお知らせ 】", edit_overwork_consent_user_path(current_user), remote: true, class: "status" %>
+          <p class="notice"><%= @overtime %>件の通知があります</p>
         <% else %>
           【 残業申請のお知らせ 】
         <% end %>
@@ -116,7 +117,7 @@
                 <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time) %></td>
               <% end %>
           <td><%= day.business_process %></td>
-          <td></td>
+          <td><%= day.overtime_status %></td>
         </tr>
       <% end %>
     </tbody>
@@ -141,4 +142,7 @@
 </div>
 
 <!--モーダルウインドウ-->
+<!--残業申請-->
 <div id="edit-overwork-request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<!--残業申請のお知らせ-->
+<div id="edit-overwork-consent" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

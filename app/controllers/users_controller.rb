@@ -1,12 +1,12 @@
 class UsersController < ApplicationController
 
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info,
-                                  :working, :edit_overwork_request, :update_overwork_request]
+                                  :working, :edit_overwork_consent, :update_overwork_consent,]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :working,
-                                        :edit_overwork_request, :update_overwork_request]
+                                        :edit_overwork_consent, :update_overwork_consent]
   before_action :correct_user, only: [:edit, :update]
   before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info, :working]
-  before_action :set_one_month, only: [:show, :working, :edit_overwork_request, :update_overwork_request]
+  before_action :set_one_month, only: [:show, :working, :edit_overwork_consent, :update_overwork_consent]
 
   def index
     @users = User.paginate(page: params[:page])
@@ -74,6 +74,12 @@ class UsersController < ApplicationController
   end
   
   def edit_info
+  end
+  
+  def edit_overwork_consent
+  end
+  
+  def update_overwork_consent
   end
 
   private
