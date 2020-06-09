@@ -36,7 +36,7 @@
       
       <li>
         <% if @overtime != 0 %>
-          <%= link_to "【 残業申請のお知らせ 】", edit_overwork_consent_user_path(current_user), remote: true, class: "status" %>
+          <%= link_to "【 残業申請のお知らせ 】", attendances_edit_overwork_consent_user_path(current_user), remote: true, class: "status" %>
           <p class="notice"><%= @overtime %>件の通知があります</p>
         <% else %>
           【 残業申請のお知らせ 】

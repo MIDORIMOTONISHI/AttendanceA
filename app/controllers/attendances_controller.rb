@@ -1,5 +1,5 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month]
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overwork_consent, :update_overwork_consent]
   before_action :logged_in_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :admin_or_correct_user, only:[:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: [:edit_one_month, :update_one_month]
@@ -42,6 +42,7 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
+  #残業申請ページ
   def edit_overwork_request
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
@@ -55,6 +56,14 @@ class AttendancesController < ApplicationController
     @attendance.update_attributes(overwork_params)
     flash[:success] = "残業を申請しました。"
     redirect_to @user
+  end
+  
+  #残業申請承認ページ
+  def edit_overwork_consent
+    @attendance = @user.attendances.find(params[:id])
+  end
+  
+  def update_overwork_consent
   end
   
   private
