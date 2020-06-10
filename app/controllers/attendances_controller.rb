@@ -60,7 +60,7 @@ class AttendancesController < ApplicationController
   
   #残業申請承認ページ
   def edit_overwork_consent
-    @attendance = @user.attendances.find(params[:id])
+    @attendance = @user.attendances.where(overtime_status: "申請中")
   end
   
   def update_overwork_consent
