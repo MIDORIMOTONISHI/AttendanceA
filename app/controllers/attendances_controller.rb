@@ -51,7 +51,12 @@ class AttendancesController < ApplicationController
   def update_overwork_request
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-    params[:attendance][:tomorrow] == '1' ? Time.now.tomorrow : Time.now
+    if params[:attendance][:tomorrow] == "true"
+      tomorrow_day = @attendance.worked_on.to_date.tomorrow
+      params[:attendance][:scheduled_end_time] = tomorrow_day.to_s + " " + params[:attendance][:scheduled_end_time] + ":00"
+    else
+      params[:attendance][:scheduled_end_time] = @attendance.worked_on.to_s + " " + params[:attendance][:scheduled_end_time] + ":00"
+    end
     params[:attendance][:overtime_status] = "申請中"
     @attendance.update_attributes(overwork_params)
     flash[:success] = "残業を申請しました。"
@@ -60,10 +65,11 @@ class AttendancesController < ApplicationController
   
   #残業申請承認ページ
   def edit_overwork_consent
-    @attendance = @user.attendances.where(overtime_status: "申請中")
+    @attendances = @user.attendances.where(overtime_status: "申請中", confirmation: @user.name).order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
   end
   
   def update_overwork_consent
+    @attendances = @user.attendances.where(overtime_status: "申請中", confirmation: @user.name)
   end
   
   private

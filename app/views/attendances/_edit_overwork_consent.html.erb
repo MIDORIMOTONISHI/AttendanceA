@@ -10,9 +10,9 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-md-10 col-md-offset-1">
-            <% @attendance.each do |attendance| %>
+            <% @attendances.each do |id, user| %>
               <table class="table table-bordered table-condensed table-striped user-table">
-                <div class="overwork-consent">【 <%= @user.name %> からの残業申請】</div>
+                <div class="overwork-consent">【 <%= User.find(id).name %> からの残業申請】</div>
                   <thead>
                     <th>日付</th>
                     <th>曜日</th>
@@ -24,8 +24,10 @@
                     <th>変更</th>
                     <th>勤怠を確認する</th>
                   </thead>
-    
-                  <tbody>
+                  
+                <% user.each do |attendance| %>
+                  <%= f.fields_for "attendances[]", attendance do |at| %>
+                    <tbody>
                       <td><%= l(attendance.worked_on, format: :short) %></td>
                       <% if attendance.worked_on.wday == 6 %>
                         <td class="sat"><%= $days_of_the_week[attendance.worked_on.wday] %>
@@ -35,16 +37,18 @@
                         <td><%= $days_of_the_week[attendance.worked_on.wday] %>
                       <% end %>
                       <td><%= l(attendance.scheduled_end_time, format: :time) %></td>
-                      <td><%= l(@user.designated_work_end_time, format: :time) %></td>
-                      <td><%= working_overtimes(@user.designated_work_end_time, attendance.scheduled_end_time) %></td>
+                      <td><%= l(User.find(id).designated_work_end_time, format: :time) %></td>
+                      <td><%= working_overtimes(User.find(id).designated_work_end_time, attendance.scheduled_end_time) %></td>
                       <td><%= attendance.business_process %></td>
-                      <td><%= f.select :overtime_status, [["申請中", "申請中"], ["承認", "承認"], ["否認", "否認"]], class: "form-control" %></td>
-                      <td><%= f.check_box :tomorrow, id: "tomorrow" %></td>
+                      <td><%= at.select :overtime_status, [["申請中"], ["承認"], ["否認"]], class: "form-control" %></td>
+                      <td><%= at.check_box :tomorrow, id: "tomorrow" %></td>
                       <td><%= link_to "確認", "#", class: "btn btn-primary" %></td>
-                  </tbody>
+                    </tbody>
+                  <% end %>
+                <% end %>
               </table>
             <% end %>
-   
+
             <div class="center">
               <%= f.submit "変更を送信する", class: "btn btn-primary btn-lg btn-user" %>
             </div>

@@ -11,6 +11,6 @@ module ApplicationHelper
   end
   
   def working_overtimes(designated_work_end_time, scheduled_end_time)
-      format("%.2f", (((scheduled_end_time - designated_work_end_time) / 60) / 60.0) - 24)
+      format("%.2f", (((scheduled_end_time - designated_work_end_time) / 60) / 60.0))
   end
 end
