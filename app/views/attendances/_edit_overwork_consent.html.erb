@@ -38,7 +38,7 @@
                       <% end %>
                       <td><%= l(attendance.scheduled_end_time, format: :time) %></td>
                       <td><%= l(User.find(id).designated_work_end_time, format: :time) %></td>
-                      <td><%= working_overtimes(User.find(id).designated_work_end_time, attendance.scheduled_end_time) %></td>
+                      <td><%= working_overtimes(User.find(id).designated_work_end_time, attendance.scheduled_end_time, attendance.worked_on) %></td>
                       <td><%= attendance.business_process %></td>
                       <td><%= at.select :overtime_status, [["申請中"], ["承認"], ["否認"]], class: "form-control" %></td>
                       <td><%= at.check_box :tomorrow, id: "tomorrow" %></td>

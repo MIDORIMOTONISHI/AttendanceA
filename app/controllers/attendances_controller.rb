@@ -51,6 +51,7 @@ class AttendancesController < ApplicationController
   def update_overwork_request
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
+    #時間外時間を計算する
     if params[:attendance][:tomorrow] == "true"
       tomorrow_day = @attendance.worked_on.to_date.tomorrow
       params[:attendance][:scheduled_end_time] = tomorrow_day.to_s + " " + params[:attendance][:scheduled_end_time] + ":00"
@@ -65,11 +66,11 @@ class AttendancesController < ApplicationController
   
   #残業申請承認ページ
   def edit_overwork_consent
-    @attendances = @user.attendances.where(overtime_status: "申請中", confirmation: @user.name).order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
+    @attendances = Attendance.where(overtime_status: "申請中", confirmation: @user.name).order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
   end
   
   def update_overwork_consent
-    @attendances = @user.attendances.where(overtime_status: "申請中", confirmation: @user.name)
+    @attendances = Attendance.where(overtime_status: "申請中", confirmation: @user.name)
   end
   
   private

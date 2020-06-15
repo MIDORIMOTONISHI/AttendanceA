@@ -37,7 +37,7 @@
       <li>
         <% if @overtime != 0 %>
           <%= link_to "【 残業申請のお知らせ 】", attendances_edit_overwork_consent_user_path(current_user), remote: true, class: "status" %>
-          <p class="notice"><%= @overtime %>件の通知があります</p>
+          <p class="notice"><%= overtime_notice.count %>件の通知があります</p>
         <% else %>
           【 残業申請のお知らせ 】
         <% end %>
@@ -114,7 +114,7 @@
           <td><%= day.scheduled_end_time.strftime('%H') if day.scheduled_end_time.present? %></td>
           <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%M') if day.scheduled_end_time.present? %></td>
           <td><% if day.scheduled_end_time.present? %>
-                <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time) %></td>
+                <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time, day.worked_on) %></td>
               <% end %>
           <td><%= day.business_process %></td>
           <td><%= day.overtime_status %></td>

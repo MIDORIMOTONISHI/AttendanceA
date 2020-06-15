@@ -25,7 +25,6 @@ class UsersController < ApplicationController
   
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
-    @overtime = @attendances.where(overtime_status: "申請中", confirmation: current_user.name).count
   end
   
   def create
