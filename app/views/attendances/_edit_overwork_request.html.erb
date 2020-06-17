@@ -32,10 +32,7 @@
                     <td><%= f.time_field :scheduled_end_time, class: "form-control" %></td>
                     <td><%= f.check_box :tomorrow, {class: "tomorrow"}, true, false %></td>
                     <td><%= f.text_field :business_process, class: "form-control" %></td>
-                    <td><%= f.select :confirmation, [["上長A", "上長A"], ["上長B", "上長B"]], class: "form-control" %></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><%= f.select :confirmation, ["上長A", "上長B"], class: "form-control" %></td>
               </tbody>
             </table>
             

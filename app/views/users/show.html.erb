@@ -114,10 +114,16 @@
           <td><%= day.scheduled_end_time.strftime('%H') if day.scheduled_end_time.present? %></td>
           <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%M') if day.scheduled_end_time.present? %></td>
           <td><% if day.scheduled_end_time.present? %>
-                <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time, day.worked_on) %></td>
+                <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time, day.worked_on) %>
               <% end %>
+          </td>
           <td><%= day.business_process %></td>
-          <td><%= day.overtime_status %></td>
+          <td><% if day.overtime_status == "申請中" %>
+                <%= day.confirmation %>へ<%= day.overtime_status %>
+              <% else %>
+                <%= day.overtime_status %>
+              <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

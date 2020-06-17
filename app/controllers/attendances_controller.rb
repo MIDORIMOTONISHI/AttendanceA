@@ -6,6 +6,7 @@ class AttendancesController < ApplicationController
   
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
 
+  #出社・退社
   def update
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
@@ -24,7 +25,8 @@ class AttendancesController < ApplicationController
     end
     redirect_to @user
   end
-  
+
+  #勤怠を編集する
   def edit_one_month
   end
   
@@ -42,7 +44,8 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
-  #残業申請ページ
+  
+  #残業申請
   def edit_overwork_request
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
@@ -64,22 +67,43 @@ class AttendancesController < ApplicationController
     redirect_to @user
   end
   
-  #残業申請承認ページ
+  
+  #残業申請を承認する
   def edit_overwork_consent
     @attendances = Attendance.where(overtime_status: "申請中", confirmation: @user.name).order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
   end
   
   def update_overwork_consent
-    @attendances = Attendance.where(overtime_status: "申請中", confirmation: @user.name)
+    ActiveRecord::Base.transaction do
+      overwork_consent_params.each do |id, item|
+        if item[:change] == "true"
+          attendance = Attendance.find(id)
+          attendance.update_attributes!(item)
+        end
+      end
+    end
+    flash[:success] = "残業申請を承認しました。"
+    redirect_to user_url(date: params[:date])
+  rescue ActiveRecord::RecordInvalid
+    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+    redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
+    
   
   private
+    #勤怠編集
     def attendances_params
       params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :scheduled_end_time, :overtime, :business_process, :confirmation])[:attendances]
     end
     
+    #残業申請
     def overwork_params
       params.require(:attendance).permit(:scheduled_end_time, :tomorrow, :business_process, :confirmation, :overtime_status)
+    end
+    
+    #残業申請承認
+    def overwork_consent_params
+      params.require(:user).permit(attendance: [:change, :overtime_status])[:attendance]
     end
     
     def admin_or_correct_user
