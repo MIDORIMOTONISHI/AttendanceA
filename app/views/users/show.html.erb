@@ -32,11 +32,18 @@
     <p>
       <li>【 所属長承認申請のお知らせ 】</li>
       
-      <li>【 勤怠変更申請のお知らせ 】</li>
+      <li>
+        <% if @attendance_notice != 0 %>
+          <%= link_to "【 勤怠変更申請のお知らせ 】", attendances_edit_attendance_consent_user_path(@user), remote: true, class: "status" %>
+          <p class="notice"><%= attendance_notice.count %>件の通知があります</p>
+        <% else %>
+          【 勤怠変更申請のお知らせ 】
+        <% end %>
+      </li>
       
       <li>
         <% if @overtime != 0 %>
-          <%= link_to "【 残業申請のお知らせ 】", attendances_edit_overwork_consent_user_path(current_user), remote: true, class: "status" %>
+          <%= link_to "【 残業申請のお知らせ 】", attendances_edit_overwork_consent_user_path(@user), remote: true, class: "status" %>
           <p class="notice"><%= overtime_notice.count %>件の通知があります</p>
         <% else %>
           【 残業申請のお知らせ 】
@@ -152,3 +159,5 @@
 <div id="edit-overwork-request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <!--残業申請のお知らせ-->
 <div id="edit-overwork-consent" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<!--勤怠編集申請のお知らせ-->
+<div id="edit-attendance-consent" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

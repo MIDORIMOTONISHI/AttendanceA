@@ -25,6 +25,7 @@ class UsersController < ApplicationController
   
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
+    @attendance_notice = @attendances.where(attendance_status: "申請中", confirmation: @user.name).count
   end
   
   def create
@@ -75,12 +76,6 @@ class UsersController < ApplicationController
   def edit_info
   end
   
-  def edit_overwork_consent
-  end
-  
-  def update_overwork_consent
-  end
-
   private
 
     def user_params

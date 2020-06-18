@@ -1,5 +1,5 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overwork_consent, :update_overwork_consent]
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overwork_consent, :update_overwork_consent, :edit_attendance_consent, :update_attendance_consent]
   before_action :logged_in_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :admin_or_correct_user, only:[:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: [:edit_one_month, :update_one_month]
@@ -26,7 +26,7 @@ class AttendancesController < ApplicationController
     redirect_to @user
   end
 
-  #勤怠を編集する
+  # 勤怠を編集する
   def edit_one_month
   end
   
@@ -34,6 +34,7 @@ class AttendancesController < ApplicationController
     ActiveRecord::Base.transaction do
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
+        item[:attendance_status] = "申請中"
         attendance.update_attributes!(item)
       end
     end
@@ -44,8 +45,15 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
+  # 勤怠編集申請を承認する
+  def edit_attendance_consent
+  end
   
-  #残業申請
+  def update_attendance_consent
+  end
+  
+  
+  # 残業を申請する
   def edit_overwork_request
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
@@ -79,29 +87,32 @@ class AttendancesController < ApplicationController
         if item[:change] == "true"
           attendance = Attendance.find(id)
           attendance.update_attributes!(item)
+          flash[:success] = "残業申請を承認しました。"
+        else
+          flash[:danger] = "変更にチェックを入れて下さい。"
         end
       end
     end
-    flash[:success] = "残業申請を承認しました。"
-    redirect_to user_url(date: params[:date])
+    redirect_to @user
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
-    redirect_to attendances_edit_one_month_user_url(date: params[:date])
+    redirect_to @user
   end
     
   
   private
-    #勤怠編集
+  
+    # 勤怠編集
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :scheduled_end_time, :overtime, :business_process, :confirmation])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :scheduled_end_time, :overtime, :business_process, :confirmation, :attendance_status])[:attendances]
     end
     
-    #残業申請
+    # 残業申請
     def overwork_params
       params.require(:attendance).permit(:scheduled_end_time, :tomorrow, :business_process, :confirmation, :overtime_status)
     end
     
-    #残業申請承認
+    # 残業申請承認
     def overwork_consent_params
       params.require(:user).permit(attendance: [:change, :overtime_status])[:attendance]
     end

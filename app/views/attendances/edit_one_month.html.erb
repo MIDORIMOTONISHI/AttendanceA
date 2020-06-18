@@ -39,8 +39,8 @@
                 <td><%= attendance.time_field :started_at, readonly: true, class: "form-control" %></td>
                 <td><%= attendance.time_field :finished_at, readonly: true, class: "form-control" %></td>
               <% else %>
-                <td><%= attendance.datetime_field :started_at, class: "form-control" %></td>
-                <td><%= attendance.datetime_field :finished_at, class: "form-control" %></td>
+                <td><%= attendance.time_field :started_at, class: "form-control" %></td>
+                <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
               <% end %>              
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
@@ -49,10 +49,13 @@
                 <% end %>
               </td>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
-              <td><%= attendance.time_field :scheduled_end_time, class: "form-control" %></td>
-              <td><%= attendance.time_field :overtime, class: "form-control" %></td>
+              <td><%= l(day.scheduled_end_time, format: :time) if day.scheduled_end_time.present? %></td>
+              <td><% if day.scheduled_end_time.present? %>
+                    <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time, day.worked_on) %>
+                  <% end %>
+              </td>
               <td><%= attendance.text_field :business_process, class: "form-control" %></td>
-              <td><%= attendance.text_field :confirmation, class: "form-control" %></td>
+              <td><%= attendance.select :confirmation, ["上長A", "上長B"], class: "form-control" %></td>
             </tr>
           <% end %>
         <% end %>
