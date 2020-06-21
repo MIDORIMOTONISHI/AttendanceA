@@ -54,8 +54,8 @@
                     <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time, day.worked_on) %>
                   <% end %>
               </td>
-              <td><%= attendance.text_field :business_process, class: "form-control" %></td>
-              <td><%= attendance.select :confirmation, ["上長A", "上長B"], class: "form-control" %></td>
+              <td><%= day.business_process %></td>
+              <td><%= attendance.select :confirmation, options_from_collection_for_select(@superiors, :id, :name, 1), { include_blank: true }, class: "form-control" %></td>
             </tr>
           <% end %>
         <% end %>

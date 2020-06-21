@@ -19,6 +19,7 @@ module AttendancesHelper
     designated_work_end_time = designated_work_end_time.change(year: worked_on.year, month: worked_on.month, day: worked_on.day)
     format("%.2f", (((scheduled_end_time - designated_work_end_time) / 60) / 60.0))
   end
+
   
   # 残業申請が自分に来ているか
   def overtime_notice

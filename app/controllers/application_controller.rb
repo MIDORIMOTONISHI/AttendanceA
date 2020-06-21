@@ -25,8 +25,13 @@ class ApplicationController < ActionController::Base
     redirect_to root_url unless current_user.admin?
   end
   
-  def boss_user
-    redirect_to root_url unless current_user.boss?
+  def superior_user
+    redirect_to root_url unless current_user.superior?
+  end
+  
+  # 自分以外の上長
+  def superior_without_me
+    @superiors = User.where(superior: true).where.not(id: current_user)
   end
   
   # 1ヶ月分のデータの存在を確認・セット

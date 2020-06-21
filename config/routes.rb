@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       patch 'update_basic_info'
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
+      get 'attendances/confirm_one_month'
       get 'working'
       get 'edit_overwork_consent'
       patch 'update_overwork_consent'

@@ -1,8 +1,10 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overwork_consent, :update_overwork_consent, :edit_attendance_consent, :update_attendance_consent]
-  before_action :logged_in_user, only: [:update, :edit_one_month, :update_one_month]
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overwork_consent, :update_overwork_consent, :edit_attendance_consent, :update_attendance_consent,
+                                  :edit_attendance_consent, :update_attendance_consent, :confirm_one_month]
+  before_action :logged_in_user, only: [:update, :edit_one_month, :update_one_month, :confirm_one_month]
   before_action :admin_or_correct_user, only:[:update, :edit_one_month, :update_one_month]
-  before_action :set_one_month, only: [:edit_one_month, :update_one_month]
+  before_action :set_one_month, only: [:edit_one_month, :update_one_month, :edit_overwork_consent, :confirm_one_month]
+  before_action :superior_without_me, only: [:edit_one_month]
   
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
 
@@ -47,15 +49,22 @@ class AttendancesController < ApplicationController
   
   # 勤怠編集申請を承認する
   def edit_attendance_consent
+    @attendances = Attendance.where(attendance_status: "申請中", confirmation: @user.name).order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
   end
   
   def update_attendance_consent
+  end
+  
+  # 勤怠確認用ページ
+  def confirm_one_month
+    @worked_sum = @attendances.where.not(started_at: nil).count
   end
   
   
   # 残業を申請する
   def edit_overwork_request
     @user = User.find(params[:user_id])
+    @superiors = User.where(superior: true).where.not(id: @user.id)
     @attendance = @user.attendances.find(params[:id])
   end
   
@@ -123,5 +132,10 @@ class AttendancesController < ApplicationController
         flash[:danger] = "編集権限がありません。"
         redirect_to(root_url)
       end
+    end
+    
+     # 自分以外の上長
+    def superior_without_me
+      @superiors = User.where(superior: true).where.not(id: @user.id)
     end
 end

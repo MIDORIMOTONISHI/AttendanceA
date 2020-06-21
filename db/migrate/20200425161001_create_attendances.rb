@@ -11,6 +11,8 @@ class CreateAttendances < ActiveRecord::Migration[5.1]
       t.string :business_process
       t.string :confirmation
       t.references :user, foreign_key: true
+      t.datetime :change_started_at
+      t.datetime :change_finished_at
 
       t.timestamps
     end

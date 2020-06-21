@@ -40,9 +40,9 @@
                       <td><%= l(User.find(id).designated_work_end_time, format: :time) %></td>
                       <td><%= working_overtimes(User.find(id).designated_work_end_time, attendance.scheduled_end_time, attendance.worked_on) %></td>
                       <td><%= attendance.business_process %></td>
-                      <td><%= at.select :overtime_status, [["なし"], ["申請中"], ["承認", "残業申請承認済"], ["否認", "残業申請否認"]], class: "form-control" %></td>
+                      <td><%= at.select :overtime_status, [["申請中"], ["承認", "残業申請承認済"], ["否認", "残業申請否認"]], { include_blank: true }, class: "form-control" %></td>
                       <td><%= at.check_box :change, {class: "change"}, true, false %></td>
-                      <td><%= link_to "確認", "#", class: "btn btn-primary" %></td>
+                      <td><%= link_to "確認", attendances_confirm_one_month_user_path(User.find(id), date: @first_day), class: "btn btn-primary" %></td>
                     </tbody>
                   <% end %>
                 <% end %>

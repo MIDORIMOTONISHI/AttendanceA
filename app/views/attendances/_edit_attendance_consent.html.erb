@@ -5,12 +5,71 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h1 class="modal-title">勤怠編集申請のお知らせ</h1>
+        <h1 class="modal-title">勤怠変更申請のお知らせ</h1>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-md-10 col-md-offset-1">
-
+            <% @attendances.each do |id, user| %>
+              <table class="table table-bordered table-condensed table-striped user-table">
+                <div class="overwork-consent">【 <%= User.find(id).name %> からの勤怠変更申請】</div>
+                  <thead>
+                    <tr>
+                      <th rowspan="3">日付</th>
+                      <th rowspan="3">曜日</th>
+                      <th colspan="4">変更前</th>
+                      <th colspan="4">変更後</th>
+                      <th rowspan="3">備考</th>
+                      <th rowspan="3">支持者確認㊞</th>
+                      <th rowspan="3">変更</th>
+                      <th rowspan="3">勤怠を確認する</th>
+                    </tr>
+                    <tr>
+                      <th colspan="2">出社</th>
+                      <th colspan="2">退社</th>
+                      <th colspan="2">出社</th>
+                      <th colspan="2">退社</th>
+                    </tr>
+                    <tr>
+                      <th>時</th>
+                      <th>分</th>
+                      <th>時</th>
+                      <th>分</th>
+                      <th>時</th>
+                      <th>分</th>
+                      <th>時</th>
+                      <th>分</th>
+                    </tr>
+                  </thead>
+                  
+                <% user.each do |attendance| %>
+                  <%= f.fields_for "attendance[]", attendance do |at| %>
+                    <tbody>
+                      <td><%= l(attendance.worked_on, format: :short) %></td>
+                      <% if attendance.worked_on.wday == 6 %>
+                        <td class="sat"><%= $days_of_the_week[attendance.worked_on.wday] %>
+                      <% elsif attendance.worked_on.wday == 0 %>
+                        <td class="sun"><%= $days_of_the_week[attendance.worked_on.wday] %>
+                      <% else %>
+                        <td><%= $days_of_the_week[attendance.worked_on.wday] %>
+                      <% end %>
+                      <td><%= attendance.started_at.strftime('%H') if attendance.started_at.present? %></td>
+                      <td><%= attendance.started_at.floor_to(15.minutes).strftime('%M') if attendance.started_at.present? %></td>
+                      <td><%= attendance.finished_at.strftime('%H') if attendance.finished_at.present? %></td>
+                      <td><%= attendance.finished_at.floor_to(15.minutes).strftime('%M') if attendance.finished_at.present? %></td>
+                      <td><%= attendance.started_at.strftime('%H') if attendance.started_at.present? %></td>
+                      <td><%= attendance.started_at.floor_to(15.minutes).strftime('%M') if attendance.started_at.present? %></td>
+                      <td><%= attendance.scheduled_end_time.strftime('%H') if attendance.scheduled_end_time.present? %></td>
+                      <td><%= attendance.scheduled_end_time.floor_to(15.minutes).strftime('%M') if attendance.scheduled_end_time.present? %></td>
+                      <td><%= attendance.business_process %></td>
+                      <td><%= at.select :attendance_status, [["申請中"], ["承認", "残業申請承認済"], ["否認", "残業申請否認"]], { include_blank: true }, class: "form-control" %></td>
+                      <td><%= at.check_box :attendance_change, {class: "attendance_change"}, true, false %></td>
+                      <td><%= link_to "確認", attendances_confirm_one_month_user_path(User.find(id), date: @first_day), class: "btn btn-primary" %></td>
+                    </tbody>
+                  <% end %>
+                <% end %>
+              </table>
+            <% end %>
 
             <div class="center">
               <%= f.submit "変更を送信する", class: "btn btn-primary btn-lg btn-user" %>
