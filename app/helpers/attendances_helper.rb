@@ -19,15 +19,4 @@ module AttendancesHelper
     designated_work_end_time = designated_work_end_time.change(year: worked_on.year, month: worked_on.month, day: worked_on.day)
     format("%.2f", (((scheduled_end_time - designated_work_end_time) / 60) / 60.0))
   end
-
-  
-  # 残業申請が自分に来ているか
-  def overtime_notice
-    Attendance.where(overtime_status: "申請中", confirmation: @user.name)
-  end
-  
-  # 勤怠申請が自分に来ているか
-  def attendance_notice
-    Attendance.where(attendance_status: "申請中", confirmation: @user.name)
-  end
 end

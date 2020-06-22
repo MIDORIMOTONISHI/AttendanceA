@@ -57,10 +57,10 @@
                       <td><%= attendance.started_at.floor_to(15.minutes).strftime('%M') if attendance.started_at.present? %></td>
                       <td><%= attendance.finished_at.strftime('%H') if attendance.finished_at.present? %></td>
                       <td><%= attendance.finished_at.floor_to(15.minutes).strftime('%M') if attendance.finished_at.present? %></td>
-                      <td><%= attendance.started_at.strftime('%H') if attendance.started_at.present? %></td>
-                      <td><%= attendance.started_at.floor_to(15.minutes).strftime('%M') if attendance.started_at.present? %></td>
-                      <td><%= attendance.scheduled_end_time.strftime('%H') if attendance.scheduled_end_time.present? %></td>
-                      <td><%= attendance.scheduled_end_time.floor_to(15.minutes).strftime('%M') if attendance.scheduled_end_time.present? %></td>
+                      <td><%= attendance.change_started_at.strftime('%H') if attendance.change_started_at.present? %></td>
+                      <td><%= attendance.change_started_at.floor_to(15.minutes).strftime('%M') if attendance.change_started_at.present? %></td>
+                      <td><%= attendance.change_finished_at.strftime('%H') if attendance.change_finished_at.present? %></td>
+                      <td><%= attendance.change_finished_at.floor_to(15.minutes).strftime('%M') if attendance.change_finished_at.present? %></td>
                       <td><%= attendance.business_process %></td>
                       <td><%= at.select :attendance_status, [["申請中"], ["承認", "残業申請承認済"], ["否認", "残業申請否認"]], { include_blank: true }, class: "form-control" %></td>
                       <td><%= at.check_box :attendance_change, {class: "attendance_change"}, true, false %></td>

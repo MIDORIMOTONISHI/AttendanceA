@@ -5,19 +5,13 @@
     <table class="table table-bordered table-condensed table-hover" id="table-attendances">
       <thead>
         <tr>
-          <th rowspan="2">日付</th>
-          <th rowspan="2">曜日</th>
-          <th colspan="4">【実績】</th>
-          <th colspan="4">所定外勤務</th>
-        </tr>
-        <tr>
+          <th>日付</th>
+          <th>曜日</th>
           <th>出社</th>
           <th>退社</th>
+          <th>翌日</th>
           <th>在社時間</th>
           <th>備考</th>
-          <th>終了予定時間</th>
-          <th>時間外時間</th>
-          <th>業務処理内容</th>
           <th>支持者確認印</th>
         </tr>
       </thead>
@@ -35,13 +29,13 @@
                 <td><%= $days_of_the_week[day.worked_on.wday] %>
               <% end %>
               </td>
-              <% if Date.current < day.worked_on %>
-                <td><%= attendance.time_field :started_at, readonly: true, class: "form-control" %></td>
-                <td><%= attendance.time_field :finished_at, readonly: true, class: "form-control" %></td>
-              <% else %>
-                <td><%= attendance.time_field :started_at, class: "form-control" %></td>
-                <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
-              <% end %>              
+              <td><%= attendance.time_select :change_started_at,
+                                              {selected: attendance.object.started_at, include_blank: true, ignore_date: true, minute_step: 15},
+                                              {class: "form-control time-select-width"} %></td>
+              <td><%= attendance.time_select :change_finished_at,
+                                              {selected: attendance.object.finished_at, include_blank: true, ignore_date: true, minute_step: 15},
+                                              {class: "form-control time-select-width"}%></td>
+              <td><%= attendance.check_box :tomorrow, {class: "tomorrow"}, true, false %></td>
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
                   <%= str_times = working_times(day.started_at, day.finished_at) %>
@@ -49,13 +43,8 @@
                 <% end %>
               </td>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
-              <td><%= l(day.scheduled_end_time, format: :time) if day.scheduled_end_time.present? %></td>
-              <td><% if day.scheduled_end_time.present? %>
-                    <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time, day.worked_on) %>
-                  <% end %>
-              </td>
-              <td><%= day.business_process %></td>
-              <td><%= attendance.select :confirmation, options_from_collection_for_select(@superiors, :id, :name, 1), { include_blank: true }, class: "form-control" %></td>
+              <!--<td>< %= attendance.select :confirmation, options_from_collection_for_select(@superiors, :name, :name, 1), { include_blank: true }, class: "form-control" %></td>-->
+              <td><%= attendance.collection_select :confirmation, @superiors, :name, :name, { include_blank: true } %></td>
             </tr>
           <% end %>
         <% end %>

@@ -28,20 +28,31 @@ class AttendancesController < ApplicationController
     redirect_to @user
   end
 
-  # 勤怠を編集する
+  # 勤怠変更を申請する
   def edit_one_month
   end
   
   def update_one_month
     ActiveRecord::Base.transaction do
       attendances_params.each do |id, item|
-        attendance = Attendance.find(id)
-        item[:attendance_status] = "申請中"
-        attendance.update_attributes!(item)
+        if item[:confirmation].present?
+          attendance = Attendance.find(id)
+          item[:attendance_status] = "申請中"
+          @change_started_at = (attendance.worked_on.to_s + "T" + item["change_started_at(4i)"] + ":" + item["change_started_at(5i)"] + ":" + "00").to_datetime
+          @change_finished_at = (attendance.worked_on.to_s + "T" + item["change_finished_at(4i)"] + ":" + item["change_finished_at(5i)"] + ":" + "00").to_datetime
+          @change_finished_at = @change_finished_at.tomorrow if item[:tomorrow]
+          attendance.update_attributes!(
+            change_started_at: @change_started_at,
+            change_finished_at: @change_finished_at,
+            confirmation: item[:confirmation],
+            note: item[:note],
+            attendance_status: item[:attendance_status]
+          )
+        end
       end
     end
     flash[:success] = "１ヶ月分の勤怠情報を更新しました。"
-    redirect_to user_url(date: params[:date])
+    redirect_to user_url(date: params[:date]) and return
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
@@ -79,6 +90,7 @@ class AttendancesController < ApplicationController
       params[:attendance][:scheduled_end_time] = @attendance.worked_on.to_s + " " + params[:attendance][:scheduled_end_time] + ":00"
     end
     params[:attendance][:overtime_status] = "申請中"
+    params[:attendance][:tomorrow] = "false"
     @attendance.update_attributes(overwork_params)
     flash[:success] = "残業を申請しました。"
     redirect_to @user
@@ -113,7 +125,7 @@ class AttendancesController < ApplicationController
   
     # 勤怠編集
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :scheduled_end_time, :overtime, :business_process, :confirmation, :attendance_status])[:attendances]
+      params.require(:user).permit(attendances: [:note, :confirmation, :attendance_status, :change_started_at, :change_finished_at, :tomorrow])[:attendances]
     end
     
     # 残業申請
