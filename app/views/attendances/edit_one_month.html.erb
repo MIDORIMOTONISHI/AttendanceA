@@ -29,10 +29,10 @@
                 <td><%= $days_of_the_week[day.worked_on.wday] %>
               <% end %>
               </td>
-              <td><%= attendance.time_select :change_started_at,
+              <td><%= attendance.time_select :changed_started_at,
                                               {selected: attendance.object.started_at, include_blank: true, ignore_date: true, minute_step: 15},
                                               {class: "form-control time-select-width"} %></td>
-              <td><%= attendance.time_select :change_finished_at,
+              <td><%= attendance.time_select :changed_finished_at,
                                               {selected: attendance.object.finished_at, include_blank: true, ignore_date: true, minute_step: 15},
                                               {class: "form-control time-select-width"}%></td>
               <td><%= attendance.check_box :tomorrow, {class: "tomorrow"}, true, false %></td>
@@ -43,7 +43,7 @@
                 <% end %>
               </td>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
-              <!--<td>< %= attendance.select :confirmation, options_from_collection_for_select(@superiors, :name, :name, 1), { include_blank: true }, class: "form-control" %></td>-->
+              <!--<td>< %= attendance.select :confirmation, options_from_collection_for_select(@superiors, :id, :name, 1), { include_blank: true }, class: "form-control" %>-->
               <td><%= attendance.collection_select :confirmation, @superiors, :name, :name, { include_blank: true } %></td>
             </tr>
           <% end %>

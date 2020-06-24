@@ -13,17 +13,21 @@ class Attendance < ApplicationRecord
 
   def finished_at_is_invalid_without_a_started_at
     errors.add(:started_at, "が必要です") if started_at.blank? && finished_at.present?
+    errors.add(:started_at, "が必要です") if changed_started_at.blank? && changed_finished_at.present?
   end
   
   def started_at_than_finished_at_fast_if_invalid
     if started_at.present? && finished_at.present?
       errors.add(:started_at, "より早い退勤時間は無効です") if started_at > finished_at
+    elsif changed_started_at.present? && changed_finished_at.present?
+      errors.add(:started_at, "より早い退勤時間は無効です") if changed_started_at > changed_finished_at
     end
   end
   
   def started_at_is_invalid_without_a_finished_at
     unless Date.current == worked_on
       errors.add(:started_at, "が必要です") if finished_at.blank? && started_at.present?
+      errors.add(:started_at, "が必要です") if changed_finished_at.blank? && changed_started_at.present?
     end
   end
 end

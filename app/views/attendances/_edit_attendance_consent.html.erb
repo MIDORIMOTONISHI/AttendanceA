@@ -5,7 +5,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h1 class="modal-title">勤怠変更申請のお知らせ</h1>
+        <h1 class="modal-title">勤怠編集申請のお知らせ</h1>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -43,7 +43,7 @@
                   </thead>
                   
                 <% user.each do |attendance| %>
-                  <%= f.fields_for "attendance[]", attendance do |at| %>
+                  <%= f.fields_for "attendances[]", attendance do |at| %>
                     <tbody>
                       <td><%= l(attendance.worked_on, format: :short) %></td>
                       <% if attendance.worked_on.wday == 6 %>
@@ -57,12 +57,12 @@
                       <td><%= attendance.started_at.floor_to(15.minutes).strftime('%M') if attendance.started_at.present? %></td>
                       <td><%= attendance.finished_at.strftime('%H') if attendance.finished_at.present? %></td>
                       <td><%= attendance.finished_at.floor_to(15.minutes).strftime('%M') if attendance.finished_at.present? %></td>
-                      <td><%= attendance.change_started_at.strftime('%H') if attendance.change_started_at.present? %></td>
-                      <td><%= attendance.change_started_at.floor_to(15.minutes).strftime('%M') if attendance.change_started_at.present? %></td>
-                      <td><%= attendance.change_finished_at.strftime('%H') if attendance.change_finished_at.present? %></td>
-                      <td><%= attendance.change_finished_at.floor_to(15.minutes).strftime('%M') if attendance.change_finished_at.present? %></td>
+                      <td><%= attendance.changed_started_at.strftime('%H') if attendance.changed_started_at.present? %></td>
+                      <td><%= attendance.changed_started_at.floor_to(15.minutes).strftime('%M') if attendance.changed_started_at.present? %></td>
+                      <td><%= attendance.changed_finished_at.strftime('%H') if attendance.changed_finished_at.present? %></td>
+                      <td><%= attendance.changed_finished_at.floor_to(15.minutes).strftime('%M') if attendance.changed_finished_at.present? %></td>
                       <td><%= attendance.business_process %></td>
-                      <td><%= at.select :attendance_status, [["申請中"], ["承認", "残業申請承認済"], ["否認", "残業申請否認"]], { include_blank: true }, class: "form-control" %></td>
+                      <td><%= at.select :attendance_status, [["申請中"], ["承認", "勤怠編集承認済"], ["否認", "勤怠編集否認"]], { include_blank: true }, class: "form-control" %></td>
                       <td><%= at.check_box :attendance_change, {class: "attendance_change"}, true, false %></td>
                       <td><%= link_to "確認", attendances_confirm_one_month_user_path(User.find(id), date: @first_day), class: "btn btn-primary" %></td>
                     </tbody>

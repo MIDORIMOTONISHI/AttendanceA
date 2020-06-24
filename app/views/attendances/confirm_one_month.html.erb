@@ -65,29 +65,54 @@
             <td><%= $days_of_the_week[day.worked_on.wday] %>
           <% end %>
           </td>
-          <td><%= day.started_at.strftime('%H') if day.started_at.present? %></td>
-          <td><%= day.started_at.floor_to(15.minutes).strftime('%M') if day.started_at.present? %></td>
+          <% if day.changed_started_at.present? && day.attendance_status == "勤怠編集承認済" %>
+            <td><%= day.changed_started_at.strftime('%H') %></td>
+            <td><%= day.changed_started_at.floor_to(15.minutes).strftime('%M') %></td>
+          <% else %>
+            <td><%= day.started_at.strftime('%H') if day.started_at.present? %></td>
+            <td><%= day.started_at.floor_to(15.minutes).strftime('%M') if day.started_at.present? %></td>
+          <% end %>
           <td></td>
-          <td><%= day.finished_at.strftime('%H') if day.finished_at.present? %></td>
-          <td><%= day.finished_at.floor_to(15.minutes).strftime('%M') if day.finished_at.present? %></td>
-          <td><% if day.started_at.present? && day.finished_at.present? %>
-                <%= str_times = working_times(day.started_at, day.finished_at) %>
-                <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-              <% end %>
+          <% if day.changed_finished_at.present? && day.attendance_status == "勤怠編集承認済" %>
+            <td><%= day.changed_finished_at.strftime('%H') %></td>
+            <td><%= day.changed_finished_at.floor_to(15.minutes).strftime('%M') %></td>
+          <% else %>
+            <td><%= day.finished_at.strftime('%H') if day.finished_at.present? %></td>
+            <td><%= day.finished_at.floor_to(15.minutes).strftime('%M') if day.finished_at.present? %></td>
+          <% end %>
+          
+          <!--在社時間-->
+          <td>
+            <% if day.started_at.present? && day.finished_at.present? %>
+              <%= str_times = working_times(day.started_at, day.finished_at) %>
+              <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+            <% elsif day.changed_started_at.present? && day.changed_finished_at.present? && day.attendance_status == "勤怠編集承認済" %>  
+              <%= str_times = working_times(day.changed_started_at, day.changed_finished_at) %>
+              <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+            <% end %>
           </td>
-          <td><%= day.note %></td>
+          
+          <td><%= day.note if day.attendance_status == "勤怠編集承認済" %></td>
           <td><%= day.scheduled_end_time.strftime('%H') if day.scheduled_end_time.present? %></td>
           <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%M') if day.scheduled_end_time.present? %></td>
-          <td><% if day.scheduled_end_time.present? %>
-                <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time, day.worked_on) %>
-              <% end %>
+          <td>
+            <% if day.scheduled_end_time.present? %>
+              <%= working_overtimes(@user.designated_work_end_time, day.scheduled_end_time, day.worked_on) %>
+            <% end %>
           </td>
           <td><%= day.business_process %></td>
-          <td><% if day.overtime_status == "申請中" %>
-                <%= day.confirmation %>へ<%= day.overtime_status %>
-              <% else %>
-                <%= day.overtime_status %>
-              <% end %>
+          <!--指示者確認㊞-->
+          <td>
+            <% if day.overtime_status == "申請中" %>
+              <%= day.confirmation %>へ残業申請中
+            <% else %>
+              <%= day.overtime_status %>
+            <% end %>
+            <% if day.attendance_status == "申請中" %>
+              　<%= day.confirmation %>へ勤怠編集申請中
+            <% else %>
+              　<%= day.attendance_status %>
+            <% end %>
           </td>
         </tr>
       <% end %>
