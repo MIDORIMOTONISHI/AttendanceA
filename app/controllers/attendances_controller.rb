@@ -42,9 +42,11 @@ class AttendancesController < ApplicationController
           end
           attendance = Attendance.find(id)
           item[:attendance_status] = "申請中"
-          @changed_started_at = (attendance.worked_on.to_s + " " + item["changed_started_at(4i)"] + ":" + item["changed_started_at(5i)"] + ":" + "00")
-          @changed_finished_at = (attendance.worked_on.to_s + " " + item["changed_finished_at(4i)"] + ":" + item["changed_finished_at(5i)"] + ":" + "00")
-          @changed_finished_at = @changed_finished_at.tomorrow if item[:tomorrow]
+          @changed_started_at = attendance.worked_on.to_s + " " + item["changed_started_at(4i)"] + ":" + item["changed_started_at(5i)"] + ":" + "00"
+          @changed_finished_at = attendance.worked_on.to_s + " " + item["changed_finished_at(4i)"] + ":" + item["changed_finished_at(5i)"] + ":" + "00"
+          tomorrow_day = attendance.worked_on.to_date.tomorrow
+          @changed_finished_at = tomorrow_day.to_s + " " + item["changed_finished_at(4i)"] + ":" + item["changed_finished_at(5i)"] + ":" + "00" if item[:tomorrow]
+          # @changed_finished_at = @changed_finished_at.to_datetime.tomorrow if item[:tomorrow]
           attendance.update_attributes!(
             changed_started_at: @changed_started_at,
             changed_finished_at: @changed_finished_at,

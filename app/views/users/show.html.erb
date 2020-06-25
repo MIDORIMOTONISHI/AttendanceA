@@ -129,11 +129,11 @@
           
           <!--在社時間-->
           <td>
-            <% if day.started_at.present? && day.finished_at.present? %>
-              <%= str_times = working_times(day.started_at, day.finished_at) %>
-              <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-            <% elsif day.changed_started_at.present? && day.changed_finished_at.present? && day.attendance_status == "勤怠編集承認済" %>  
+            <% if day.changed_started_at.present? && day.changed_finished_at.present? && day.attendance_status == "勤怠編集承認済" %>  
               <%= str_times = working_times(day.changed_started_at, day.changed_finished_at) %>
+              <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+            <% elsif day.started_at.present? && day.finished_at.present? %>
+              <%= str_times = working_times(day.started_at, day.finished_at) %>
               <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
             <% end %>
           </td>
