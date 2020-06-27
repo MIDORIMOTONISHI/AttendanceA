@@ -18,7 +18,7 @@ User.create!(name: "上長B",
              password_confirmation: "password",
              superior: true)
 
-60.times do |n|
+3.times do |n|
   name  = Faker::Name.name
   email = "sample-#{n+1}@email.com"
   password = "password"

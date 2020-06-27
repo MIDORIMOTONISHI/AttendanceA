@@ -25,6 +25,9 @@ Rails.application.routes.draw do
       patch 'attendances/update_overwork_consent'
       get 'attendances/edit_attendance_consent'
       patch 'attendances/update_attendance_consent'
+      patch 'attendances/update_month_request'
+      get 'attendances/edit_month_consent'
+      patch 'attendances/update_month_consent'
     end
     resources :attendances, only: :update do
       member do

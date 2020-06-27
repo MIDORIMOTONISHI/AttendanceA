@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info,
-                                  :working, :edit_overwork_consent, :update_overwork_consent,]
+                                  :working, :edit_overwork_consent, :update_overwork_consent, :update_month_request]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :working,
                                         :edit_overwork_consent, :update_overwork_consent]
   before_action :correct_user, only: [:edit, :update]
@@ -25,8 +25,11 @@ class UsersController < ApplicationController
   
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
+    @attendance = Attendance.find_by(user_id: @user, worked_on: @first_day)
+    @month_notice = Attendance.where(month_status: "申請中", month_confirmation: @user.name).count
+    @attendance_notice = Attendance.where(attendance_status: "申請中", attendance_confirmation: @user.name).count
     @overtime_notice = Attendance.where(overtime_status: "申請中", confirmation: @user.name).count
-    @attendance_notice = Attendance.where(attendance_status: "申請中", confirmation: @user.name).count
+    @superiors = User.where(superior: true).where.not(id: @user.id)
   end
   
   def create
@@ -76,6 +79,10 @@ class UsersController < ApplicationController
   
   def edit_info
   end
+  
+  def update_month_request
+  end
+
   
   private
 

@@ -44,7 +44,7 @@
               </td>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
               <!--<td>< %= attendance.select :confirmation, options_from_collection_for_select(@superiors, :id, :name, 1), { include_blank: true }, class: "form-control" %>-->
-              <td><%= attendance.collection_select :confirmation, @superiors, :name, :name, { include_blank: true } %></td>
+              <td><%= attendance.collection_select :attendance_confirmation, @superiors, :name, :name, { include_blank: true }, class: "form-control" %></td>
             </tr>
           <% end %>
         <% end %>

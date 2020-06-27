@@ -1,0 +1,44 @@
+<%= form_with(model: @user, url: attendances_update_month_consent_user_path(@user), local: true, method: :patch) do |f| %>
+  <div class="modal-dialog modal-lg modal-dialog-center">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h1 class="modal-title">所属長承認申請のお知らせ</h1>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-10 col-md-offset-1">
+            <% @attendances.each do |id, user| %>
+              <table class="table table-bordered table-condensed table-striped user-table">
+                <div class="overwork-consent">【 <%= User.find(id).name %> からの１ヶ月分勤怠申請】</div>
+                  <thead>
+                    <th>月</th>
+                    <th>支持者確認㊞</th>
+                    <th>変更</th>
+                    <th>勤怠を確認する</th>
+                  </thead>
+                  
+                <% user.each do |attendance| %>
+                  <%= f.fields_for "attendances[]", attendance do |at| %>
+                    <tbody>
+                      <td><%= attendance.worked_on.month %>月</td>
+                      <td><%= at.select :month_status, [["申請中"], ["承認", "承認済"], ["否認"]], { include_blank: true }, class: "form-control" %></td>
+                      <td><%= at.check_box :month_change, {class: "change"}, true, false %></td>
+                      <td><%= link_to "確認", attendances_confirm_one_month_user_path(User.find(id), date: @first_day), class: "btn btn-primary" %></td>
+                    </tbody>
+                  <% end %>
+                <% end %>
+              </table>
+            <% end %>
+
+            <div class="center">
+              <%= f.submit "変更を送信する", class: "btn btn-primary btn-lg btn-user" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
