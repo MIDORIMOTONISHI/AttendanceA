@@ -1,6 +1,9 @@
 class AttendancesController < ApplicationController
   before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overwork_consent, :update_overwork_consent, :edit_attendance_consent, :update_attendance_consent,
-                                  :edit_attendance_consent, :update_attendance_consent, :confirm_one_month, :update_month_request, :edit_month_consent, :update_month_consent]
+                                  :edit_attendance_consent, :update_attendance_consent, :confirm_one_month, :update_month_request, :edit_month_consent, :update_month_consent,
+                                  :attendance_log]
+  before_action :correct_user, only: [:edit_one_month, :attendance_log]
+  before_action :admin_user_not, only: [:edit_one_month, :attendance_log]
   before_action :logged_in_user, only: [:update, :edit_one_month, :update_one_month, :confirm_one_month]
   before_action :admin_or_correct_user, only:[:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: [:edit_one_month, :update_one_month, :edit_overwork_consent, :confirm_one_month]
@@ -178,6 +181,18 @@ class AttendancesController < ApplicationController
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
     redirect_to @user
+  end
+  
+  # 勤怠ログ
+  def attendance_log
+    if params[:search].blank?
+      @logs = @user.attendances.where(attendance_status: "勤怠編集承認済").order(worked_on: "ASC")
+    else
+      select_day = params[:search]["worked_on(1i)"] + "-" + format("%02d", params[:search]["worked_on(2i)"]) + "-" + format("%02d", params[:search]["worked_on(3i)"])
+      first_day = select_day.to_date.beginning_of_month
+      last_day = first_day.end_of_month
+      @logs = @user.attendances.where(worked_on: first_day..last_day).where(attendance_status: "勤怠編集承認済").order(worked_on: "ASC")
+    end
   end
     
   

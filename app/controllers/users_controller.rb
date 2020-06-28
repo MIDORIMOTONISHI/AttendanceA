@@ -4,8 +4,9 @@ class UsersController < ApplicationController
                                   :working, :edit_overwork_consent, :update_overwork_consent, :update_month_request]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :working,
                                         :edit_overwork_consent, :update_overwork_consent]
-  before_action :correct_user, only: [:edit, :update]
-  before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info, :working]
+  before_action :correct_user, only: [:show, :edit, :update]
+  before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info, :working, :edit_info]
+  before_action :admin_user_not, only: [:show, :edit]
   before_action :set_one_month, only: [:show, :working, :edit_overwork_consent, :update_overwork_consent]
 
   def index
@@ -30,6 +31,17 @@ class UsersController < ApplicationController
     @attendance_notice = Attendance.where(attendance_status: "申請中", attendance_confirmation: @user.name).count
     @overtime_notice = Attendance.where(overtime_status: "申請中", confirmation: @user.name).count
     @superiors = User.where(superior: true).where.not(id: @user.id)
+    
+    # CSV出力
+    respond_to do |format|
+      format.html do
+          #html用の処理を書く
+      end
+      format.csv do
+        send_data render_to_string.encode(Encoding::Windows_31J, undef: :replace, row_sep: "\r\n", force_quotes: true),
+        filename: "#{@user.name}(#{l(@first_day, format: :middle)})勤怠情報.csv", type: :csv  #csv用の処理を書く(ファイル名指定)
+      end
+    end
   end
   
   def create

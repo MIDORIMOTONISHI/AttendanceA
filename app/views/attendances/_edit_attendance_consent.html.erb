@@ -64,7 +64,7 @@
                       <td><%= attendance.note %></td>
                       <td><%= at.select :attendance_status, [["申請中"], ["承認", "勤怠編集承認済"], ["否認", "勤怠編集否認"]], { include_blank: true }, class: "form-control" %></td>
                       <td><%= at.check_box :attendance_change, {class: "attendance_change"}, true, false %></td>
-                      <td><%= link_to "確認", attendances_confirm_one_month_user_path(User.find(id), date: @first_day), class: "btn btn-primary" %></td>
+                      <td><%= link_to "確認", attendances_confirm_one_month_user_path(User.find(id), date: attendance.worked_on.beginning_of_month), class: "btn btn-primary" %></td>
                     </tbody>
                   <% end %>
                 <% end %>

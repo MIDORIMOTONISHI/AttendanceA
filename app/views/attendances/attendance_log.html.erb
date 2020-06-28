@@ -1,0 +1,41 @@
+<% provide(:title, @user.name) %>
+
+<h1>勤怠ログ</h1>
+
+<%= form_tag(attendances_attendance_log_user_path, method: :get) do %>
+  <div class="pull-left">
+    <!--< %= f.date_select :search, {discard_day: true, prompt: {year: "年", month: "月"}, start_year:Time.now.year, end_year:Time.now.year-10 }, class: "form-control" %>-->
+    <%= date_select :search, 'worked_on', {start_year: Time.now.year, end_year: Time.now.year-5, discard_day: true, prompt: {year: "年", month: "月"}}, class: "form-control"  %>
+    <%= submit_tag "　検索　", worked_on: :nil, class: "btn btn-primary btn-show" %>
+  </div>
+<% end %>
+
+
+<div>
+  <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>変更前出社時間</th>
+        <th>変更前退社時間</th>
+        <th>変更後出社時間</th>
+        <th>変更後退社時間</th>
+        <th>指示者</th>
+      </tr>
+    </thead>
+  
+    <tbody>
+      <% @logs.each do |day| %>
+        <tr>
+          <td><%= l(day.worked_on, format: :long) %></td>
+          <td><%= l(day.started_at, format: :time) if day.started_at.present? %></td>
+          <td><%= l(day.finished_at, format: :time) if day.finished_at.present? %></td>
+          <td><%= l(day.changed_started_at, format: :time) if day.changed_started_at.present? %></td>
+          <td><%= l(day.changed_finished_at, format: :time) if day.changed_finished_at.present? %></td>
+          <td><%= day.attendance_confirmation %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+

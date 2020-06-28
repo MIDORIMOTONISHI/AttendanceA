@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       patch 'attendances/update_month_request'
       get 'attendances/edit_month_consent'
       patch 'attendances/update_month_consent'
+      get 'attendances/attendance_log'
     end
     resources :attendances, only: :update do
       member do

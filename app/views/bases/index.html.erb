@@ -13,7 +13,7 @@
       </tr>
       <% @bases.each do |base| %>
       <tr>
-        <td><%= link_to "修正", edit_basis_path(base), remote: true, class: "btn btn-primary btn-base" %></td>
+        <td><%= link_to "編集", edit_basis_path(base), remote: true, class: "btn btn-primary btn-base" %></td>
         <td><%= link_to "削除", base, method: :delete,
                 data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary btn-base" %></td>
         <td><%= base.base_number %></td>
@@ -22,7 +22,7 @@
       </tr>
       <% end %>
       <tr>
-        <td colspan="5"><%= link_to "拠点情報追加", new_basis_path, class: "btn btn-primary btn-base" %></td>
+        <tf colspan="5"><%= link_to "拠点情報追加", new_basis_path, class: "btn btn-primary btn-base" %></td>
       </tr>
     </thead>
   </table>
